@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+      {% load usersproj_filters %}
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+   span {
+  margin-left: 40%;
+    margin-right: 50%;
+   }
+   </style>
+</head>
+<body>
+{% if user.is_authenticated %}
+
+
+
+{% for book in books_valid %}
+<a href= "{% url 'one_book_on_shelf'  %}?book_pk={{book.pk}}&shelf_pk={{pk}}"><p>{{book.author}}</p>
+<p>{{book.title}}</p> </a>
+{% endfor %}
+ <a href= "{% url 'add_item'  %}?pk={{pk}}"><p>Добавить книгу</p> </a>
+{% else %}
+ {% endif %}
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+{% for sh in shelf %}
+ <a href= "{% url 'book_list_on_shelf'  %}?pk={{sh.pk}}"><p>{{ sh.name}}</p> </a>
+
+{% endfor %}
+{% else %}
+ {% endif %}
+</body>
+</html>

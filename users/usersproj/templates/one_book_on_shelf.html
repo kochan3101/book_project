@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load usersproj_filters %}
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+
+
+{% autoescape off %}
+<span>{% book_filter book   %}</span>
+{% endautoescape %}
+
+
+{% else %}
+ {% endif %}
+</body>
+</html>

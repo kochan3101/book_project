@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Welcome to the Djungle !</h1>
+    {% if user.is_authenticated %}
+        <h2>Hello {{ user.username }}</h2>
+    {% else %}
+<form action="{% url 'user' %}" method="POST" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ user_form.as_p }}
+ {{ profile_form.as_p }}
+    {{ avatar_form.as_p }}
+  <input type="submit">
+</form>
+ {% endif %}
+</body>
+</html>

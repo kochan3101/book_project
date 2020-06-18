@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Welcome!</h1>
+    {% if user.is_authenticated %}
+{% for g in gallery %}
+
+ <a href= "{% url 'newimage'  %}?pk={{g.pk}}"><p> добавить в  альбом {{ g.name_gallery}} фото</p> </a>
+ <a href= "{% url 'image_in_gallery'  %}?pk={{g.pk}}"><p>{{ g.name_gallery}}</p> </a>
+{% endfor %}
+
+
+<a href= "{% url 'newgallery'  %}">Создать альбом</a>
+    {% else %}
+<p></p><a href= "{% url 'user'  %}">Зарегистрироваться </a>
+<p></p><a href= "{% url 'login'  %}">Войти </a>
+ {% endif %}
+</body>
+</html>

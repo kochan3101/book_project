@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h1>Welcome!</h1>
+    {% if user.is_authenticated %}
+        <h2>Hello {{ user.profile.gallery}}</h2>
+<p>{{ user.profile.create_date}}</p>
+<img src="{{ user.photo_in_gallery.profile_avatar.image.url }}">
+{{user.gallery}}
+<form action="{% url 'newgallery' %}"  method="POST">
+    {% csrf_token %}
+    <h1 class="r"><font size="5" color="DimGrey" face=Roboto>newgallery</font></h1>
+    <p> {{ gallery_form }}</p>
+<input class="button" type="submit">
+    <p></p><a href= "{% url 'listshelf'  %}">полки </a>
+</form>
+    {% else %}
+<p></p><a href= "{% url 'user'  %}">Зарегистрироваться </a>
+<p></p><a href= "{% url 'login'  %}">Войти </a>
+ {% endif %}
+</body>
+</html>

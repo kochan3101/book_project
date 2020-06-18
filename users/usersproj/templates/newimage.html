@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+   {% if user.is_authenticated %}
+
+        <h2>Hello {{ user.username }}</h2>
+   <form action="{% url 'newimage' %}?pk={{pk}}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+    {{ avatar_form.as_p }}
+  <input type="submit">
+</form>
+    {% else %}
+
+ {% endif %}
+</body>
+</html>

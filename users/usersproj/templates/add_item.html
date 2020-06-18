@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+{% if user.is_authenticated %}
+<form action="{% url 'add_item' %}?pk={{pk}}"  method="POST" enctype="multipart/form-data" >
+    {% csrf_token %}
+    <h1 class="r"><font size="5" color="DimGrey" face=Roboto>Добавить книгу</font></h1>
+    <p> {{ book_form.as_p }}</p>
+<input class="button" type="submit">
+
+</form>
+{% else %}
+ {% endif %}
+</body>
+</html>
