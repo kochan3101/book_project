@@ -7,6 +7,7 @@ register = Library()
 
 @register.simple_tag(name='book_filter')
 def book_filter(book):
+
     book_valid_filter = ''
    #for book in book_valid:  # была итерация по books
     print(book.book)

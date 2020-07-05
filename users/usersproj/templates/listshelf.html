@@ -5,7 +5,11 @@
     <title>Title</title>
 </head>
 <body>
+
 {% if user.is_authenticated %}
+<header>
+    <a href= "{% url 'shelf' %}">создать полку</a>
+</header>
 {% for sh in shelf %}
  <a href= "{% url 'book_list_on_shelf'  %}?pk={{sh.pk}}"><p>{{ sh.name}}</p> </a>
 

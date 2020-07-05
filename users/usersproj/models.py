@@ -60,3 +60,7 @@ class BookAdmin(models.Model):
     author = models.CharField(max_length=500)
     page_num = models.IntegerField(default=0)
     book = models.FileField(upload_to='books/', null=True, blank=True)
+    book_image = models.ImageField(upload_to='book_images/', null=True, blank=True)
+    want_read = models.BooleanField(default=False)
+    read = models.BooleanField(default=False)
+    i_read = models.BooleanField(default=False)

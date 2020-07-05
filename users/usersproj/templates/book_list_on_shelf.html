@@ -8,20 +8,63 @@
     <style>
    span {
   margin-left: 40%;
-    margin-right: 50%;
+
    }
+ a  img {
+width: 90px;
+height: 90px;
+border-radius: 50%;
+ }
+ .button-2 {
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 15px;
+    font-family: monospace;
+    font-size: 16px;
+    color: #232323;
+
+}
+
+.button-2 span {
+    position: relative;
+     text-align: left;
+}
+
+.button-2:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0px;
+    width: 25px;
+    height: 100%;
+    background: #C4F1FF;
+    transition: .3s ease-in-out;
+}
+
+.button-2:hover:before {
+    width: 120%;
+}
+
    </style>
 </head>
 <body>
+
 {% if user.is_authenticated %}
 
 
 
 {% for book in books_valid %}
-<a href= "{% url 'one_book_on_shelf'  %}?book_pk={{book.pk}}&shelf_pk={{pk}}"><p>{{book.author}}</p>
-<p>{{book.title}}</p> </a>
+<p>{{book.author}}</p>
+<p>{{book.title}}</p>
+<a href= "{% url 'one_book_on_shelf'  %}?book_pk={{book.pk}}&shelf_pk={{pk}}"><img alt=""    src="{{ book.book_image.url }}"></a>
+<p><a href= "{% url 'one_book_on_shelf'  %}?book_pk={{book.pk}}&shelf_pk={{pk}}" class="button-2">
+<span>читать</span></a>
+</p>
 {% endfor %}
- <a href= "{% url 'add_item'  %}?pk={{pk}}"><p>Добавить книгу</p> </a>
+
 {% else %}
  {% endif %}
 </body>

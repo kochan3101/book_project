@@ -65,11 +65,15 @@ class ShelfForm(forms.ModelForm):
         fields = ['name']
 
 
-
 class BookForm(forms.ModelForm):
     class Meta:
         model = models.Book
         fields = ['title', 'author', 'book']
+
+class BookFormValid(forms.ModelForm):
+    class Meta:
+        model = models.BookAdmin
+        fields = ['want_read', 'read', 'i_read']
 
 
 class RedBook(forms.Form):

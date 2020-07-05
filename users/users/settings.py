@@ -38,10 +38,15 @@ INSTALLED_APPS = [
     'usersproj',
 ]
 
+CACHE_MIDDLEWARE_SECONDS = 3
+#CACHE_MIDDLEWARE_ALIAS = 'fast'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -75,6 +80,25 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+CASHES =  {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'cache',
+        'OPTIONS': {
+            'MAX_ENTRIES': 50,
+            'CULL-FREQUENCY': 3,
+        }
+    },
+    'fast': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'super-snowflake',
+        'OPTIONS': {
+            'MAX_ENTRIES': 10,
+            'CULL-FREQUENCY': 4
+        }
     }
 }
 

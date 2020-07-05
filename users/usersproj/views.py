@@ -4,6 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
 from django.core.exceptions import PermissionDenied
+from django.core.paginator import Paginator, PageNotAnInteger
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect, reverse
 from django.views import View
@@ -12,7 +13,7 @@ from django.core.mail import send_mail
 from django.core.files import File
 
 from . import models
-from .forms import UserForm, ProfileForm, LoginUserForm, BookForm, ShelfForm, AvatarForm, GalleryForm
+from .forms import UserForm, ProfileForm, LoginUserForm, BookForm, ShelfForm, AvatarForm, GalleryForm, BookFormValid
 from django.contrib import auth
 from . import forms
 from .models import Shelf
@@ -196,7 +197,7 @@ class ShelfUserView(TemplateView):
           #  print(user.username)
             shelf.profile = user
             shelf.save()
-            return redirect(reverse('book_list') + f'?pk={shelf.pk}')
+            return redirect('/')
             #return HttpResponse('Authenticated successfully')
         except ValueError:
             return render(request, self.template_name, {'shelf_form': shelf_form,
@@ -268,14 +269,7 @@ def book_list_on_shelf(request):
     book_valid = """"""
     books = shelf.book_set.all()
     books_valid = shelf.bookadmin_set.all()
-    for book in books_valid: # была итерация по books
-        print(book.book.name)
-        with open(f'./media/{book.book.name}', 'r') as f:
-            file = File(f)
-            for line in file:
-                book_valid = book_valid + line
-    #for book in books:
-      #  print(book.book.name)
+
     return render(request, 'book_list_on_shelf.html', {'books': books, 'pk': pk,
                                                        'book_valid': book_valid,
                                                        'books_valid': books_valid,
@@ -324,9 +318,55 @@ def book_valid_ad_odinochestva(request):
    # book.save()
    # print(book.book.name)
     #return redirect('/')
+counter_book_list_valid = 0
 
 def book_list_valid(request):
+    last_want_read = []
+    last_read = []
+    last_i_read = []
     books = models.BookAdmin.objects.all()
+   # book = models.BookAdmin.objects.get(pk=request.GET.get('book_pk'))
+    if request.method == 'POST':
+
+        book_form = BookFormValid(request.POST)
+        if book_form.is_valid():
+            book_form = book_form.cleaned_data
+            print(book_form['want_read'])
+
+            if book_form['want_read'] == True:
+
+                last_want_read.append(book_form['want_read'])
+                book = models.BookAdmin.objects.get(pk=request.GET.get('book_pk'))
+                book.want_read = book_form['want_read']
+                shelf = models.Shelf.objects.create(profile=request.user, name='want_read')
+                print(book.book.name)
+                shelf.bookadmin_set.add(book)
+                #print(shelf.n)
+                book.save()
+                shelf.save()
+                print(last_want_read)
+                print(shelf.bookadmin_set.all())
+                for book in (shelf.bookadmin_set.all()):
+                    print(book.shelf)
+                return redirect('/')
+            if book_form['read'] == True:
+                book = models.BookAdmin.objects.get(pk=request.GET.get('book_pk'))
+                book.read = book_form['read']
+                shelf = models.Shelf.objects.create(profile=request.user, name='read')
+                shelf.bookadmin_set.add(book)
+                book.save()
+                return redirect('/')
+            if book_form['i_read'] == True:
+                book = models.BookAdmin.objects.get(pk=request.GET.get('book_pk'))
+                book.i_read = book_form['i_read']
+                shelf = models.Shelf.objects.create(profile=request.user, name='i_read')
+                shelf.bookadmin_set.add(book)
+                book.save()
+                return redirect('/')
+
+    else:
+        book_form = BookFormValid()
+        pk = request.GET.get('pk')
     return render(request, 'book_list_valid.html', {'books': books,
                                                        })
 
@@ -340,12 +380,34 @@ def shelf_list_for_book(request):
 
 
 def one_book_on_shelf(request):
+    count = 0
+    book_valid_filter = ''
+    paginator_book_valid_filter = []
     shelf_pk = request.GET.get('shelf_pk')
     book_pk = request.GET.get('book_pk')
     shelf = models.Shelf.objects.get(profile=request.user, pk=shelf_pk)
     book = models.BookAdmin.objects.get(shelf=shelf, pk=book_pk)
-    return render(request, 'one_book_on_shelf.html', {'book': book,
+    book_valid_filter = book_valid_filter + f'<h1>{book.author}</h1>' + f'<h1>{book.title}</h1>'
+    with open(f'./media/{book.book.name}', 'r') as f:
+        file = File(f)
 
+        for line in file:
+            count =+ 1
+            book_valid_filter = book_valid_filter + f'<p>    {line}</p>'
+            if count%10==1:
+
+                paginator_book_valid_filter.append(book_valid_filter)
+                book_valid_filter = ''
+    paginator = Paginator(paginator_book_valid_filter, 9)
+    page = request.GET.get('page', 1)
+    try:
+        pages_books = paginator.get_page(page)
+    except PageNotAnInteger:
+
+        pages_books = paginator.get_page(1)
+    return render(request, 'one_book_on_shelf.html', {'book': book,
+                                                      'pages_books': pages_books,
+                                                      'shelf': shelf,
                                                        })
 
 

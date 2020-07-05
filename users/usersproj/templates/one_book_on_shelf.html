@@ -4,14 +4,38 @@
     {% load usersproj_filters %}
     <meta charset="UTF-8">
     <title>Title</title>
+    <style>
+        span.book {
+  text-indent: 1.5em;
+  text-align: justify;
+
+   }
+    </style>
 </head>
 <body>
 {% if user.is_authenticated %}
 
 
+
+
+       {% for page_book in pages_books %}
 {% autoescape off %}
-<span>{% book_filter book   %}</span>
+
+        <span class="book" >{{page_book}}</span>
+
 {% endautoescape %}
+        {% endfor %}
+
+ {% if pages_books.has_previous %}
+    <a href="?page=1&shelf_pk={{shelf.pk}}&book_pk={{book.pk}}"><<</a>
+    <a href="?page={{ pages_books.previous_page_number }}&shelf_pk={{shelf.pk}}&book_pk={{book.pk}}"><</a>
+    {% endif %}
+
+    {% if pages_books.has_next %}
+    <a href="?page={{ pages_books.next_page_number }}&shelf_pk={{shelf.pk}}&book_pk={{book.pk}}"> >  </a>
+    <a href="?page={{ pages_books.paginator.num_pages }}&shelf_pk={{shelf.pk}}&book_pk={{book.pk}}"> >>  </a>
+    {% endif %}
+
 
 
 {% else %}

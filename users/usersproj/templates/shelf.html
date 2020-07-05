@@ -6,10 +6,7 @@
     <title>Title</title>
 </head>
 <body>
-<h1>Welcome!</h1>
     {% if user.is_authenticated %}
-        <h2>Hello {{ user.username}}</h2>
-<p>{{ user.profile.create_date}}</p>
 <img src="{{ user.photo_in_gallery.profile_avatar.image.url }}">
 {{user.gallery}}
 <form action="{% url 'shelf' %}"  method="POST">
@@ -17,11 +14,9 @@
     <h1 class="r"><font size="5" color="DimGrey" face=Roboto>Полка</font></h1>
     <p> {{ shelf_form }}</p>
 <input class="button" type="submit">
-    <p></p><a href= "{% url 'listshelf'  %}">полки </a>
-     <p></p><a href= "{% url 'book_list_valid'  %}">книги</a>
+
 </form>
-<a href= "{% url 'listgallery'  %}">Галлерея</a>
-    {% else %}
+ {% else %}
 <p></p><a href= "{% url 'user'  %}">Зарегистрироваться </a>
 <p></p><a href= "{% url 'login'  %}">Войти </a>
  {% endif %}

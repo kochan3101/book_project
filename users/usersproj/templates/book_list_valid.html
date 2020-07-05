@@ -3,11 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    {% load static %}
+    <style>
+a  img.book_image {
+width: 80px;
+height: 80px;
+border-radius: 50%;
+ }
+ a  img.header {
+width: 40px;
+height: 27px;
+border: none;
+ }
+ header {
+ background:black;
+ }
+    </style>
 </head>
+<header >
+    <a href= "{% url 'listshelf' %}"><img class="header" src="{% static 'images.png' %}"></a>
+
+    <a href= "{% url 'listgallery' %}">галлерея</a>
+    <a href= "{% url 'logout' %}">выйти</a>
+</header>
 <body>
 {% for book in books %}
- <a href= "{% url 'shelf_list_for_book' %}?pk={{book.pk}}"><h2>{{book.author}}</h2>
-<p>{{book.title}}</p></a>
+<p>{{book.author}}</p>
+<p>{{book.title}}</p>
+<a href= "{% url 'shelf_list_for_book' %}?pk={{book.pk}}"><img height="10" class="book_image" src="{{ book.book_image.url }}"></a>
+<form action="{% url 'book_list_valid'  %}?book_pk={{book.pk}}"  method="POST">
+    {% csrf_token %}
+
+
+  <input type="checkbox" name="want_read" placeholder="хочу прочитать" >хочу прочитать<Br>
+
+  <input type="checkbox" name="i_read"  placeholder="читаю">читаю<Br>
+
+  <input type="checkbox" name="read" placeholder="прочитал" >прочитал<Br>
+
+ <input class="button" type="submit" value="Сохранить"></form>
+
 {% endfor %}
 </body>
 </html>
